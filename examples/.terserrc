@@ -22,6 +22,5 @@
         "pure_getters": true,
         "unsafe": true,
         "unsafe_comps": true
-    },
-    "mangle": true
+    }
 }

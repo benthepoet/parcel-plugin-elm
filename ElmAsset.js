@@ -34,22 +34,16 @@ class ElmAsset extends Asset {
     const options = this.getParserOptions();
     const elm = await localRequire('node-elm-compiler', this.name);
     const compiled = await elm.compileToString(this.name, options);
+    
     this.contents = compiled.toString();
-  }
-
-  async generate() {
-    return {
-      [this.type]: this.outputCode || this.contents
-    };
-  }
-  
-  async postProcess(generated) {
+    
     if (this.options.hmr) {
-      return `
-        ${generated}
-        
+      this.contents += `
         (function () {
           if (module.hot) {
+            // Disable Hot Module Replacement
+            module.hot.accept();
+            // Force Page Reload
             module.hot.dispose(function () {
               window.location.reload();
             });
@@ -57,8 +51,12 @@ class ElmAsset extends Asset {
         })();
       `;
     }
-    
-    return generated;
+  }
+
+  async generate() {
+    return {
+      [this.type]: this.outputCode || this.contents
+    };
   }
   
   async transform() {
