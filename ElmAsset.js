@@ -21,8 +21,7 @@ class ElmAsset extends Asset {
     return defaultOptions;
   }
   
-  async getDependencies() {
-    await super.getDependencies();
+  async collectDependencies() {
     const deps = await findAllDependencies(this.name);
     deps.forEach(dep => {
       this.addDependency(dep, { includedInParent: true });
