@@ -60,24 +60,24 @@ class ElmAsset extends Asset {
     };
     
     function compress(source) {
-        const options = {
-          compress: {
-            keep_fargs: false,
-            pure_funcs: 'F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9'.split(','),
-            pure_getters: true,
-            unsafe: true,
-            unsafe_comps: true
-          }
-        };
-      
-        const { code } = minify(source, options);
-        return code;
-      }
-      
-      function mangle(contents) {
-        const { code } = minify(contents, { mangle: true });
-        return code;
-      }
+      const options = {
+        compress: {
+          keep_fargs: false,
+          pure_funcs: 'F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9'.split(','),
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true
+        }
+      };
+    
+      const { code } = minify(source, options);
+      return code;
+    }
+    
+    function mangle(contents) {
+      const { code } = minify(contents, { mangle: true });
+      return code;
+    }
   }
 
 }
