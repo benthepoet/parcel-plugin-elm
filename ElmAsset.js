@@ -1,4 +1,3 @@
-const { findAllDependencies } = require('find-elm-dependencies');
 const process = require('process');
 const Asset = require('parcel-bundler/src/Asset');
 const localRequire = require('parcel-bundler/src/utils/localRequire');
@@ -11,21 +10,23 @@ class ElmAsset extends Asset {
   }
 
   getParserOptions() {
-    const defaultOptions = {
+    const parserOptions = {
       cwd: process.cwd(),
     };
     
     if (this.options.minify) {
-      defaultOptions.optimize = true;
+      parserOptions.optimize = true;
     }
     
-    return defaultOptions;
+    return parserOptions;
   }
   
   async collectDependencies() {
-    const deps = await findAllDependencies(this.name);
-    deps.forEach(dep => {
-      this.addDependency(dep, { includedInParent: true });
+    const { findAllDependencies } = await localRequire('find-elm-dependencies', this.name);
+    const dependencies = await findAllDependencies(this.name);
+    
+    dependencies.forEach(dependency => {
+      this.addDependency(dependency, { includedInParent: true });
     });
   }
   
@@ -37,10 +38,8 @@ class ElmAsset extends Asset {
   }
 
   async generate() {
-    let code = this.outputCode != null ? this.outputCode : this.contents;
-    
     return {
-      [this.type]: code
+      [this.type]: this.outputCode || this.contents
     };
   }
   
