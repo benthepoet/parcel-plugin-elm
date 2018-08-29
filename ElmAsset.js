@@ -1,7 +1,7 @@
-const elmCompiler = require('node-elm-compiler');
 const { findAllDependencies } = require('find-elm-dependencies');
 const process = require('process');
 const Asset = require('parcel-bundler/src/Asset');
+const localRequire = require('parcel-bundler/src/utils/localRequire');
 
 class ElmAsset extends Asset {
   constructor(name, options) {
@@ -31,7 +31,8 @@ class ElmAsset extends Asset {
 
   async generate() {
     const options = this.getParserOptions();
-    const compiled = await elmCompiler.compileToString(this.name, options);
+    const elm = await localRequire('node-elm-compiler', this.name);
+    const compiled = await elm.compileToString(this.name, options);
     return compiled.toString();
   }
 }
