@@ -9,12 +9,17 @@ class ElmAsset extends JSAsset {
     const defaultOptions = {
       cwd: process.cwd(),
     };
+    
+    if (this.options.minify) {
+      defaultOptions.optimize = true;
+    }
+    
     return defaultOptions;
   }
   
   async getDependencies() {
-    await super.getDependencies()
-    let deps = await findAllDependencies(this.name);
+    await super.getDependencies();
+    const deps = await findAllDependencies(this.name);
     deps.forEach(dep => {
       this.addDependency(dep, { includedInParent: true });
     });
@@ -22,7 +27,7 @@ class ElmAsset extends JSAsset {
 
   async parse(code) {
     const options = this.getParserOptions();
-    const data = elmCompiler.compileToStringSync(this.name, options);
+    const data = await elmCompiler.compileToString(this.name, options);
     this.contents = data.toString();
     return await super.parse(this.contents);
   }
