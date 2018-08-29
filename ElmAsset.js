@@ -1,7 +1,7 @@
 const elmCompiler = require('node-elm-compiler');
 const { findAllDependencies } = require('find-elm-dependencies');
 const process = require('process');
-const Asset = require('parcel-bundler/src/assets/Asset');
+const Asset = require('parcel-bundler/src/Asset');
 
 class ElmAsset extends Asset {
 
