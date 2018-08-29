@@ -1,9 +1,9 @@
 const elmCompiler = require('node-elm-compiler');
 const { findAllDependencies } = require('find-elm-dependencies');
 const process = require('process');
-const JSAsset = require('parcel-bundler/src/assets/JSAsset');
+const Asset = require('parcel-bundler/src/assets/Asset');
 
-class ElmAsset extends JSAsset {
+class ElmAsset extends Asset {
 
   getParserOptions() {
     const defaultOptions = {
@@ -25,11 +25,15 @@ class ElmAsset extends JSAsset {
     });
   }
 
-  async parse(code) {
+  async generate() {
     const options = this.getParserOptions();
-    const data = await elmCompiler.compileToString(this.name, options);
-    this.contents = data.toString();
-    return await super.parse(this.contents);
+    const compiled = await elmCompiler.compileToString(this.name, options);
+    return [
+      {
+        type: 'js',
+        value: compiled.toString()
+      }
+    ];
   }
 }
 
