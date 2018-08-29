@@ -43,6 +43,24 @@ class ElmAsset extends Asset {
     };
   }
   
+  async postProcess(generated) {
+    if (this.options.hmr) {
+      return `
+        ${generated}
+        
+        (function () {
+          if (module.hot) {
+            module.hot.dispose(function () {
+              window.location.reload();
+            });
+          }
+        })();
+      `;
+    }
+    
+    return generated;
+  }
+  
   async transform() {
     if (this.options.minify) {
       await terser(this);
