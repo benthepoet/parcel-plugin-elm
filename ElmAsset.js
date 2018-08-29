@@ -4,6 +4,10 @@ const process = require('process');
 const Asset = require('parcel-bundler/src/Asset');
 
 class ElmAsset extends Asset {
+  constructor(name, options) {
+    super(name, options);
+    this.type = 'js';
+  }
 
   getParserOptions() {
     const defaultOptions = {
@@ -28,12 +32,7 @@ class ElmAsset extends Asset {
   async generate() {
     const options = this.getParserOptions();
     const compiled = await elmCompiler.compileToString(this.name, options);
-    return [
-      {
-        type: 'js',
-        value: compiled.toString()
-      }
-    ];
+    return compiled.toString();
   }
 }
 
