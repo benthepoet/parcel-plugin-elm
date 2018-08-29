@@ -74,8 +74,8 @@ class ElmAsset extends Asset {
       return code;
     }
     
-    function mangle(contents) {
-      const { code } = minify(contents, { mangle: true });
+    function mangle(source) {
+      const { code } = minify(source, { mangle: true });
       return code;
     }
   }
