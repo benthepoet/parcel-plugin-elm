@@ -1,21 +1,18 @@
 import Browser
-import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html exposing (Html)
+import Html.Events as Events
 
-initialModel = 0
 
-view model =  
-    div 
-        [] 
-        [ button [ onClick Decrement ] [ text "-" ] 
-        , text <| String.fromInt model
-        , button [ onClick Increment ] [ text "+" ]
-        ]
-
-type Message 
+type Msg
     = Increment 
     | Decrement
 
+
+initialModel : Int
+initialModel = 0
+
+
+update : Msg -> Int -> Int
 update msg model = 
     case msg of
         Increment -> 
@@ -24,6 +21,22 @@ update msg model =
         Decrement -> 
             model - 1
 
+
+view : Int -> Html Msg
+view model =  
+    Html.main_ 
+        [] 
+        [ Html.button 
+            [ Events.onClick Decrement ] 
+            [ Html.text "-" ] 
+        , Html.text <| String.fromInt model
+        , Html.button 
+            [ Events.onClick Increment ] 
+            [ Html.text "+" ]
+        ]
+
+
+main : Program () Int Msg
 main = 
     Browser.sandbox
         { init = initialModel

@@ -4,7 +4,7 @@
   "description": "A parcel plugin that enables elm support",
   "main": "index.js",
   "scripts": {
-    "start": "parcel serve index.html --no-cache"
+    "start": "parcel index.html --no-cache"
   },
   "author": "Suman Subash",
   "license": "ISC",

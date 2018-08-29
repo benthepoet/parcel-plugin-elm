@@ -2,6 +2,7 @@ const { findAllDependencies } = require('find-elm-dependencies');
 const process = require('process');
 const Asset = require('parcel-bundler/src/Asset');
 const localRequire = require('parcel-bundler/src/utils/localRequire');
+const terser = require('parcel-bundler/src/transforms/terser');
 
 class ElmAsset extends Asset {
   constructor(name, options) {
@@ -27,12 +28,26 @@ class ElmAsset extends Asset {
       this.addDependency(dep, { includedInParent: true });
     });
   }
-
-  async generate() {
+  
+  async parse() {
     const options = this.getParserOptions();
     const elm = await localRequire('node-elm-compiler', this.name);
     const compiled = await elm.compileToString(this.name, options);
-    return compiled.toString();
+    this.contents = compiled.toString();
+  }
+
+  async generate() {
+    let code = this.outputCode != null ? this.outputCode : this.contents;
+    
+    return {
+      [this.type]: code
+    };
+  }
+  
+  async transform() {
+    if (this.options.minify) {
+      await terser(this);
+    }
   }
 }
 
