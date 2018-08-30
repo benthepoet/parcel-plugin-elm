@@ -40,10 +40,8 @@ class ElmAsset extends Asset {
       output += `
         (function () {
           if (module.hot) {
-            // Disable Hot Module Replacement
-            module.hot.accept();
-            // Force Page Reload
-            module.hot.dispose(function () {
+            // Force reload
+            module.hot.accept(function () {
               window.location.reload();
             });
           }
